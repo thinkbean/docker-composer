@@ -3,13 +3,14 @@ MAINTAINER Mike Milano <coder1@gmail.com>
 
 RUN apt-get update && apt-get install -y \
         curl \
+        mysql-client \
         openssh-client \
         openssl \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng12-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt pdo_mysql \
+    && docker-php-ext-install -j$(nproc) iconv mcrypt pdo_mysql zip \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && echo "memory_limit=-1" > "/usr/local/etc/php/conf.d/memory-limit.ini" \
@@ -32,9 +33,6 @@ RUN curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/compos
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && rm /tmp/installer.php \
  && composer --ansi --version --no-interaction
-
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod a+x /docker-entrypoint.sh
 
 WORKDIR /app
 
