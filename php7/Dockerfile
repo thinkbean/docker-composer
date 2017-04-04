@@ -10,9 +10,10 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng12-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt pdo_mysql zip \
+    && docker-php-ext-install -j$(nproc) bcmath iconv mcrypt pdo_mysql zip \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
+    && pecl install amqp \
     && echo "memory_limit=-1" > "/usr/local/etc/php/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-UTC}" > "/usr/local/etc/php/conf.d/date_timezone.ini"
 
